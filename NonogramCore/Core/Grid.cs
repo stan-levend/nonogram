@@ -5,12 +5,9 @@ namespace nonogram.Core
 {
     public class Grid {
         
-        public int xSizeGrid { get; private set;}
-        public int ySizeGrid { get; private set;}
-        private Tile[,] tiles;
-        private int[,] horizontal;
-        private int[,] vertical;
-        private Legend legend;
+        public int xSize { get; private set; }
+        public int ySize { get; private set; }
+        public Tile[,] Tiles { get; private set; }
         private char[,] chosenImage;
         public GameState CurrentState { get; set; }
 
@@ -18,48 +15,48 @@ namespace nonogram.Core
         {
             this.chosenImage = chosenImage;
 
-            this.xSizeGrid = chosenImage.GetLength(1);
-            this.ySizeGrid = chosenImage.GetLength(0);
+            xSize = chosenImage.GetLength(1);
+            ySize = chosenImage.GetLength(0);
 
-            tiles = new Tile[ySizeGrid, xSizeGrid];
+            Tiles = new Tile[ySize, xSize];
             InitializeAndMapTiles();
-            GenerateLegend();
         }
 
         private void InitializeAndMapTiles() 
         {
-            for (int i = 0; i < ySizeGrid; i++)
+            for (int i = 0; i < ySize; i++)
             {
-                for (int j = 0; j < xSizeGrid; j++)
+                for (int j = 0; j < xSize; j++)
                 {
-                    tiles[i,j] = new Tile();
-                    if(chosenImage[i,j] == '#') tiles[i,j].Initial = TileState.Colored;
-                    else if (chosenImage[i,j] == '.') tiles[i,j].Initial = TileState.Blank;
-                    tiles[i,j].Input = TileState.Hidden;
+                    Tiles[i,j] = new Tile();
+                    if(chosenImage[i,j] == '#') Tiles[i,j].Actual = TileState.Colored;
+                    else if (chosenImage[i,j] == '.') Tiles[i,j].Actual = TileState.Blank;
+                    Tiles[i,j].Input = TileState.Hidden;
                 }
             }
         }
-        private void GenerateLegend()
+        public void BlankTile(int x, int y) 
         {
-            legend = new Legend(chosenImage);
-            vertical = legend.GenerateVertical();
-            horizontal = legend.GenerateHorizontal();
+            Tiles[y,x].Input = TileState.Blank;
         }
-
+        public void MarkTile(int x, int y) 
+        {
+            Tiles[y,x].Input = TileState.Colored;
+        }
         public void Solve() 
         {
-            foreach (var tile in tiles)
+            foreach (var tile in Tiles)
             {
-                tile.Input = tile.Initial;
+                tile.Input = tile.Actual;
             }
             CurrentState = GameState.Lost;
         }
 
         public bool IsSolved()
         {
-            foreach (var tile in tiles)
+            foreach (var tile in Tiles)
             {
-                if(tile.Initial != tile.Input) return false;
+                if(tile.Actual != tile.Input) return false;
             }
             CurrentState = GameState.Solved;
             return true;
@@ -68,65 +65,12 @@ namespace nonogram.Core
         public void RevealHint() 
         {
             var random = new Random();
-            var x = random.Next(xSizeGrid);
-            var y = random.Next(ySizeGrid);
-            if(tiles[y,x].Input == tiles[y,x].Initial) RevealHint();
-            tiles[y,x].Input = tiles[y,x].Initial;
+            var x = random.Next(xSize);
+            var y = random.Next(ySize);
+            if(Tiles[y,x].Input == Tiles[y,x].Actual) RevealHint();
+            Tiles[y,x].Input = Tiles[y,x].Actual;
         }
 
-        public void BlankTile(int x, int y) 
-        {
-            tiles[y,x].Input = TileState.Blank;
-        }
-        public void MarkTile(int x, int y) 
-        {
-            tiles[y,x].Input = TileState.Colored;
-        }
-
-        public void Print()
-        {
-            //PRINT GRID + VERTICAL LEGEND
-            for (int i = 0; i < ySizeGrid; i++)
-            {
-                for (int j = 0; j < xSizeGrid; j++)
-                {
-                    Console.Write("  ");
-                    if(tiles[i,j].Input == TileState.Colored) Console.Write("#");
-                    else if (tiles[i,j].Input == TileState.Blank) Console.Write(".");
-                    else if (tiles[i,j].Input == TileState.Hidden) Console.Write(" ");
-                }
-                Console.Write("| ");
-
-                //VERTICAL LEGEND
-                for (int j = 0; j < xSizeGrid / 2 + 1; j++)
-                {
-                    if(vertical[i,j] == 0) continue;
-                    else Console.Write(String.Format("{0,-3}", vertical[i,j]));
-                }
-                Console.WriteLine();
-            }
-
-            //PRINT LINE
-            for (int i = 0; i < xSizeGrid; i++) Console.Write("---");
-            Console.WriteLine();
-
-            //PRINT HORIZONTAL LEGEND
-            for (int i = 0; i < ySizeGrid / 2 + 1; i++)
-            {
-                int zeros = 0;
-                for (int j = 0; j < xSizeGrid; j++)
-                {
-                    if(horizontal[i,j] == 0) 
-                    {
-                        Console.Write("   ");
-                        zeros++;
-                    }
-                    else Console.Write(String.Format("{0,3}", horizontal[i,j]));
-                }
-                Console.WriteLine();
-                if(zeros == xSizeGrid) break;
-            }
-        }
     }
 }
 

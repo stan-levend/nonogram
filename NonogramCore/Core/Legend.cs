@@ -4,8 +4,8 @@ namespace nonogram.Core
 {
     public class Legend
     {
-        private int[,] vertical;
-        private int[,] horizontal;
+        public int[,] vertical { get; private set; }
+        public int[,] horizontal { get; private set; }
         private int xSizeGrid;
         private int ySizeGrid;
         private int xSizeVertical;
@@ -15,18 +15,20 @@ namespace nonogram.Core
         public Legend(char[,] chosenImage)
         {
             this.chosenImage = chosenImage;
-            this.xSizeGrid = chosenImage.GetLength(1);
-            this.ySizeGrid = chosenImage.GetLength(0);
+            xSizeGrid = chosenImage.GetLength(1);
+            ySizeGrid = chosenImage.GetLength(0);
 
-            this.xSizeVertical = (xSizeGrid / 2) + 1;
-            this.ySizeHorizontal = (ySizeGrid / 2) + 1;
+            xSizeVertical = (xSizeGrid / 2) + 1;
+            ySizeHorizontal = (ySizeGrid / 2) + 1;
 
             vertical = new int[ySizeGrid, xSizeVertical];
             horizontal = new int[ySizeHorizontal, xSizeGrid];
 
             FillLegend();
+            GenerateVertical();
+            GenerateHorizontal();
         }
-        public int[,] GenerateVertical()
+        private void GenerateVertical()
         {
             int value = 0;
             int x = 0;
@@ -49,9 +51,8 @@ namespace nonogram.Core
                 value = 0;
                 x = 0;
             }
-            return vertical;
         }
-        public int[,] GenerateHorizontal()
+        private void GenerateHorizontal()
         {
             int value = 0;
             int y = 0;
@@ -74,7 +75,6 @@ namespace nonogram.Core
                 value = 0;
                 y = 0;
             }
-            return horizontal;
         }
 
         private void FillLegend()

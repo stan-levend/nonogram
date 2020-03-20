@@ -9,7 +9,7 @@ namespace nonogram.Core
         {
         }
 
-        public TileState Initial
+        public TileState Actual
         {
             get; set;
         }
