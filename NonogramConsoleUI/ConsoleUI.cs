@@ -26,7 +26,7 @@ namespace nonogram.ConsoleUI
             while (grid.CurrentState == GameState.Playing);
 
             Print();
-            if(grid.CurrentState == GameState.Solved) Console.WriteLine("Congratulations, you have solved the puzzle");
+            if(grid.CurrentState == GameState.Won) Console.WriteLine("Congratulations, you have solved the puzzle");
             else if(grid.CurrentState == GameState.Lost) Console.WriteLine("Better luck next time.");
         }
 
@@ -38,6 +38,8 @@ namespace nonogram.ConsoleUI
         }
         private void ProcessInput()
         {
+            Console.WriteLine("(S)olve, (H)ints: {0}", hints);
+            Console.Write("(#)Mark, (.)Blank: ");
             try
             {
                 string[] input = Console.ReadLine().ToLower().Split();
@@ -58,7 +60,6 @@ namespace nonogram.ConsoleUI
                     hints--;
                     grid.RevealHint();
                 }
-                //todo input
                 else if(parsedInput == '#' || parsedInput == '.') 
                 {
                     var x = int.Parse(input[1]);
@@ -67,7 +68,7 @@ namespace nonogram.ConsoleUI
                     if(parsedInput == '#' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.MarkTile(x,y);
                     if(parsedInput == '.' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
                 } 
-                grid.IsSolved();
+                grid.IsWon();
             }
             catch (Exception) 
             {
@@ -117,9 +118,6 @@ namespace nonogram.ConsoleUI
                 Console.WriteLine();
                 if(zeros == grid.xSize) break;
             }
-
-            Console.WriteLine("(S)olve, (H)ints: {0}", hints);
-            Console.Write("(#)Mark, (.)Blank: ");
         }
         private void PrintError(string message)
         {

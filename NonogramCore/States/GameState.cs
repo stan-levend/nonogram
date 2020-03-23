@@ -5,7 +5,7 @@ namespace nonogram.States
     public enum GameState 
     {
         Playing,
-        Solved,
+        Won,
         Lost
     }
 }

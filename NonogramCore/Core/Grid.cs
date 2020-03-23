@@ -52,14 +52,13 @@ namespace nonogram.Core
             CurrentState = GameState.Lost;
         }
 
-        public bool IsSolved()
+        public void IsWon()
         {
             foreach (var tile in Tiles)
             {
-                if(tile.Actual != tile.Input) return false;
+                if(tile.Actual != tile.Input) return;
             }
-            CurrentState = GameState.Solved;
-            return true;
+            CurrentState = GameState.Won;
         }
 
         public void RevealHint() 
