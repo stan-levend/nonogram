@@ -1,38 +1,18 @@
-using System;
 using System.Collections.Generic;
 
-namespace nonogram.Core
+namespace nonogram.Database
 {
-    public class Database
+    public class DatabaseMedium
     {
-        private static List<char[,]> list = new List<char[,]>();
-        public Database()
-        {
-            list.Add(duckling);
-            list.Add(teaCan);
-            list.Add(turtle);
-            list.Add(bird);
-        }
-        
-        public char[,] ChooseRandomImage()
-        {            
-            var random = new Random();
-            int index = random.Next(list.Count);
-            return list[index];
-        }
+        public List<char[,]> List { get; private set; } = new List<char[,]>();
 
-        char[,] duckling = new char[9, 8] 
-        { 
-            {'.', '#', '#', '#', '.', '.', '.', '.'},
-            {'#', '#', '.', '#', '.', '.', '.', '.'},
-            {'.', '#', '#', '#', '.', '.', '#', '#'},
-            {'.', '.', '#', '#', '.', '.', '#', '#'},
-            {'.', '.', '#', '#', '#', '#', '#', '#'},
-            {'#', '.', '#', '#', '#', '#', '#', '.'},
-            {'#', '#', '#', '#', '#', '#', '.', '.'},
-            {'.', '.', '.', '.', '#', '.', '.', '.'},
-            {'.', '.', '.', '#', '#', '.', '.', '.'}
-        };
+        public DatabaseMedium()
+        {
+            List.Add(human);
+            List.Add(teaCan);
+            List.Add(turtle);
+            List.Add(bird);
+        }
 
         char[,] teaCan = new char[10, 10] 
         { 
@@ -76,6 +56,19 @@ namespace nonogram.Core
             {'.', '.', '.', '.', '.', '.', '.', '#', '#', '.',} 
         };
 
-    }
+        char[,] human = new char[10, 10] 
+        { 
+            {'.', '.', '.', '.', '.', '.', '#', '#', '.', '.',},
+            {'.', '.', '.', '.', '.', '.', '#', '#', '.', '.',},
+            {'.', '.', '#', '#', '#', '#', '#', '.', '.', '#',},
+            {'.', '#', '#', '.', '#', '#', '#', '#', '#', '#',},
+            {'.', '#', '.', '.', '#', '#', '.', '.', '.', '.',},
+            {'.', '.', '.', '#', '#', '.', '.', '.', '.', '.',},
+            {'.', '.', '.', '#', '#', '#', '#', '.', '.', '.',},
+            {'.', '.', '#', '#', '.', '.', '#', '.', '.', '.',},
+            {'.', '#', '#', '.', '.', '#', '#', '.', '.', '.',},
+            {'#', '#', '.', '.', '#', '#', '.', '.', '.', '.',} 
+        };
 
+    }
 }

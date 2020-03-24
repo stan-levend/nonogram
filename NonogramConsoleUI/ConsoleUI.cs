@@ -1,20 +1,21 @@
 using System;
 using nonogram.Core;
 using nonogram.States;
+using nonogram.Database;
 
 namespace nonogram.ConsoleUI
 {
     public class ConsoleUI {
         private Grid grid;
         private Legend legend;
-        private Database database;
-        private static int hints = 10;
+        private DatabaseHandler database;
+        private int hints;
         public ConsoleUI() 
         {
-            database = new Database();
         }
         public void Run() 
         {
+            ProcessInputDifficulty();
             Initialize();
             grid.CurrentState = GameState.Playing;
 
@@ -29,7 +30,40 @@ namespace nonogram.ConsoleUI
             if(grid.CurrentState == GameState.Won) Console.WriteLine("Congratulations, you have solved the puzzle");
             else if(grid.CurrentState == GameState.Lost) Console.WriteLine("Better luck next time.");
         }
+        private void ProcessInputDifficulty()
+        {
+            try
+            {
+                Console.WriteLine("Choose difficulty from following: Easy, Medium, Hard");
+                string input = Console.ReadLine().ToLower();
+                if(input == "easy") 
+                {
+                    database = new DatabaseHandler(Difficulty.Easy);
+                    hints = 5;
+                }
+                else if(input == "medium") 
+                {
+                    database = new DatabaseHandler(Difficulty.Medium);
+                    hints = 10;
+                }
+                else if(input == "hard") 
+                {
+                    database = new DatabaseHandler(Difficulty.Hard);
+                    hints = 15;
+                }
+                else
+                {
+                PrintError("You have chosen invalid difficulty. Try again.");
+                ProcessInputDifficulty();
+                }
 
+            }
+            catch(Exception)
+            {
+                PrintError("You have chosen invalid difficulty. Try again.");
+                ProcessInputDifficulty();
+            }
+        }
         private void Initialize()
         {
             var chosenImage = database.ChooseRandomImage();
@@ -97,11 +131,9 @@ namespace nonogram.ConsoleUI
                 }
                 Console.WriteLine();
             }
-
             //print horizontal line
             for (int i = 0; i < grid.xSize; i++) Console.Write("---");
             Console.WriteLine();
-
             //print horizontal legend
             for (int i = 0; i < grid.ySize / 2 + 1; i++)
             {
@@ -125,7 +157,6 @@ namespace nonogram.ConsoleUI
             Console.WriteLine(message);
             Console.ForegroundColor = ConsoleColor.White;
         }
-
     }
 }
 
