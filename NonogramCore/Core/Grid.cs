@@ -35,14 +35,17 @@ namespace nonogram.Core
                 }
             }
         }
+
         public void BlankTile(int x, int y) 
         {
             Tiles[y,x].Input = TileState.Blank;
         }
+
         public void MarkTile(int x, int y) 
         {
             Tiles[y,x].Input = TileState.Colored;
         }
+
         public void Solve() 
         {
             foreach (var tile in Tiles)
@@ -69,7 +72,6 @@ namespace nonogram.Core
             if(Tiles[y,x].Input == Tiles[y,x].Actual) RevealHint();
             Tiles[y,x].Input = Tiles[y,x].Actual;
         }
-
     }
 }
 

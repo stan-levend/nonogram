@@ -13,6 +13,7 @@ namespace nonogram.ConsoleUI
         public ConsoleUI() 
         {
         }
+
         public void Run() 
         {
             ProcessInputDifficulty();
@@ -30,6 +31,7 @@ namespace nonogram.ConsoleUI
             if(grid.CurrentState == GameState.Won) Console.WriteLine("Congratulations, you have solved the puzzle");
             else if(grid.CurrentState == GameState.Lost) Console.WriteLine("Better luck next time.");
         }
+
         private void ProcessInputDifficulty()
         {
             try
@@ -64,12 +66,14 @@ namespace nonogram.ConsoleUI
                 ProcessInputDifficulty();
             }
         }
+
         private void Initialize()
         {
             var chosenImage = database.ChooseRandomImage();
             grid = new Grid(chosenImage);
             legend = new Legend(chosenImage);
         }
+
         private void ProcessInput()
         {
             Console.WriteLine("(S)olve, (H)ints: {0}", hints);
@@ -109,11 +113,15 @@ namespace nonogram.ConsoleUI
                 PrintError("Wrong input!");
             }
         }
+
         public void Print()
         {
-            //print grid, vertical legend
+            Console.Write("  ");
+            for (int i = 0; i < grid.xSize; i++) Console.Write("{0, 3}", i);
+            Console.WriteLine("  ");
             for (int i = 0; i < grid.ySize; i++)
             {
+                Console.Write("{0, 2}", i);
                 for (int j = 0; j < grid.xSize; j++)
                 {
                     Console.Write("  ");
@@ -122,8 +130,6 @@ namespace nonogram.ConsoleUI
                     else if (grid.Tiles[i,j].Input == TileState.Hidden) Console.Write(" ");
                 }
                 Console.Write("| ");
-
-                //vertical legend
                 for (int j = 0; j < grid.xSize / 2 + 1; j++)
                 {
                     if(legend.vertical[i,j] == 0) continue;
@@ -131,12 +137,12 @@ namespace nonogram.ConsoleUI
                 }
                 Console.WriteLine();
             }
-            //print horizontal line
+            Console.Write("  ");
             for (int i = 0; i < grid.xSize; i++) Console.Write("---");
             Console.WriteLine();
-            //print horizontal legend
             for (int i = 0; i < grid.ySize / 2 + 1; i++)
             {
+                Console.Write("  ");
                 int zeros = 0;
                 for (int j = 0; j < grid.xSize; j++)
                 {
@@ -151,6 +157,7 @@ namespace nonogram.ConsoleUI
                 if(zeros == grid.xSize) break;
             }
         }
+        
         private void PrintError(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
