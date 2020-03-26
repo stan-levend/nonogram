@@ -8,8 +8,8 @@ namespace nonogram.Core
         public int[,] horizontal { get; private set; }
         private int xSizeGrid;
         private int ySizeGrid;
-        private int xSizeVertical;
-        private int ySizeHorizontal;
+        private int xMaxSizeLegend;
+        private int yMaxSizeLegend;
         private char[,] chosenImage;
 
         public Legend(char[,] chosenImage)
@@ -18,11 +18,11 @@ namespace nonogram.Core
             xSizeGrid = chosenImage.GetLength(1);
             ySizeGrid = chosenImage.GetLength(0);
 
-            xSizeVertical = (xSizeGrid / 2) + 1;
-            ySizeHorizontal = (ySizeGrid / 2) + 1;
+            xMaxSizeLegend = (xSizeGrid / 2) + 1;
+            yMaxSizeLegend = (ySizeGrid / 2) + 1;
 
-            vertical = new int[ySizeGrid, xSizeVertical];
-            horizontal = new int[ySizeHorizontal, xSizeGrid];
+            vertical = new int[ySizeGrid, xMaxSizeLegend];
+            horizontal = new int[yMaxSizeLegend, xSizeGrid];
 
             FillLegend();
             GenerateVertical();
@@ -79,7 +79,7 @@ namespace nonogram.Core
 
         private void FillLegend()
         {
-            for (int i = 0; i < ySizeHorizontal; i++)
+            for (int i = 0; i < yMaxSizeLegend; i++)
             {
                 for (int j = 0; j < xSizeGrid; j++)
                 {
@@ -88,7 +88,7 @@ namespace nonogram.Core
             }
             for (int i = 0; i < ySizeGrid; i++)
             {
-                for (int j = 0; j < xSizeVertical; j++)
+                for (int j = 0; j < xMaxSizeLegend; j++)
                 {
                     vertical[i,j] = 0;
                 }

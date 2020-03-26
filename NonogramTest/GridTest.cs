@@ -22,7 +22,7 @@ namespace NonogramTest
         };
 
         [TestMethod]
-        public void TestSolve()
+        public void SolveGridTest()
         {
             var grid = new Grid(bird);
             grid.CurrentState = GameState.Playing;
@@ -35,6 +35,7 @@ namespace NonogramTest
             grid.IsWon();
             Assert.AreEqual<GameState>(GameState.Won, grid.CurrentState);
         }
+
         [TestMethod]
         public void ActualTileTest()
         {
@@ -58,13 +59,13 @@ namespace NonogramTest
             Assert.AreEqual<TileState>(TileState.Colored, grid.Tiles[1,2].Input);
 
             grid.BlankTile(9,9);
-            Assert.AreEqual<TileState>(TileState.Colored, grid.Tiles[9,9].Input);
+            Assert.AreEqual<TileState>(TileState.Blank, grid.Tiles[9,9].Input);
             grid.BlankTile(1,2);
-            Assert.AreEqual<TileState>(TileState.Colored, grid.Tiles[2,1].Input);
+            Assert.AreEqual<TileState>(TileState.Blank, grid.Tiles[2,1].Input);
         }
 
         [TestMethod]
-        public void SizeTest() 
+        public void GridSizeTest() 
         {
             var grid = new Grid(bird);
 
@@ -72,5 +73,24 @@ namespace NonogramTest
             Assert.AreEqual<int>(bird.GetLength(1), grid.xSize);
         }
 
+        [TestMethod]
+        public void ClearGridTest()
+        {
+            var grid = new Grid(bird);
+            grid.BlankTile(1,2);
+            grid.BlankTile(3,2);
+            grid.BlankTile(7,9);
+            grid.BlankTile(9,9);
+            grid.MarkTile(2,3);
+            grid.MarkTile(5,1);
+            grid.MarkTile(2,9);
+            grid.MarkTile(2,4);
+
+            grid.Clear();
+            foreach (var tile in grid.Tiles)
+            {
+                Assert.AreEqual<TileState>(TileState.Hidden, tile.Input);
+            }
+        }
     }
 }

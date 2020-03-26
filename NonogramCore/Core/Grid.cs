@@ -39,11 +39,21 @@ namespace nonogram.Core
         public void BlankTile(int x, int y) 
         {
             Tiles[y,x].Input = TileState.Blank;
+            IsWon();
         }
 
         public void MarkTile(int x, int y) 
         {
             Tiles[y,x].Input = TileState.Colored;
+            IsWon();
+        }
+
+        public void Clear()
+        {
+            foreach (var tile in Tiles)
+            {
+                tile.Input = TileState.Hidden;
+            }
         }
 
         public void Solve() 

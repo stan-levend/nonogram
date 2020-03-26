@@ -8,7 +8,8 @@ namespace nonogram.ConsoleUI
     public class ConsoleUI {
         private Grid grid;
         private Legend legend;
-        private DatabaseHandler database;
+        private DatabaseHandler databaseHandler;
+        private Difficulty difficulty;
         private int hints;
         public ConsoleUI() 
         {
@@ -40,17 +41,17 @@ namespace nonogram.ConsoleUI
                 string input = Console.ReadLine().ToLower();
                 if(input == "easy") 
                 {
-                    database = new DatabaseHandler(Difficulty.Easy);
+                    difficulty = Difficulty.Easy;
                     hints = 5;
                 }
                 else if(input == "medium") 
                 {
-                    database = new DatabaseHandler(Difficulty.Medium);
+                    difficulty = Difficulty.Medium;
                     hints = 10;
                 }
                 else if(input == "hard") 
                 {
-                    database = new DatabaseHandler(Difficulty.Hard);
+                    difficulty = Difficulty.Hard;
                     hints = 15;
                 }
                 else
@@ -58,7 +59,6 @@ namespace nonogram.ConsoleUI
                 PrintError("You have chosen invalid difficulty. Try again.");
                 ProcessInputDifficulty();
                 }
-
             }
             catch(Exception)
             {
@@ -69,15 +69,16 @@ namespace nonogram.ConsoleUI
 
         private void Initialize()
         {
-            var chosenImage = database.ChooseRandomImage();
+            databaseHandler = new DatabaseHandler(difficulty);
+            var chosenImage = databaseHandler.ChooseRandomImage();
             grid = new Grid(chosenImage);
             legend = new Legend(chosenImage);
         }
 
         private void ProcessInput()
         {
-            Console.WriteLine("(S)olve, (H)ints: {0}", hints);
-            Console.Write("(#)Mark, (.)Blank: ");
+            Console.WriteLine($"(S)olve (C)lear (H)int: {hints}");
+            Console.Write("(#)Mark or (.)Blank followed by x,y coordinates: ");
             try
             {
                 string[] input = Console.ReadLine().ToLower().Split();
@@ -88,6 +89,10 @@ namespace nonogram.ConsoleUI
                     grid.Solve();
                     return;
                 }
+                else if (parsedInput == 'c')
+                {
+                    grid.Clear();
+                }
                 else if (parsedInput == 'h')
                 {
                     if(hints == 0) 
@@ -95,8 +100,8 @@ namespace nonogram.ConsoleUI
                         PrintError("No more hints available");
                         return;
                     }
-                    hints--;
                     grid.RevealHint();
+                    hints--;
                 }
                 else if(parsedInput == '#' || parsedInput == '.') 
                 {
@@ -106,7 +111,6 @@ namespace nonogram.ConsoleUI
                     if(parsedInput == '#' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.MarkTile(x,y);
                     if(parsedInput == '.' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
                 } 
-                grid.IsWon();
             }
             catch (Exception) 
             {
