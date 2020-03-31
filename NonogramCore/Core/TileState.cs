@@ -1,6 +1,6 @@
 using System;
 
-namespace nonogram.States
+namespace nonogram.Core
 {
     public enum TileState 
     {

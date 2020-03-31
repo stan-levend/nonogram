@@ -1,23 +1,16 @@
-using System;
 using System.Collections.Generic;
-using nonogram.States;
+using nonogram.Core;
 
 namespace nonogram.Database
 {
     public class DatabaseHandler
     {
-        private List<char[,]> list = new List<char[,]>();
+        public List<Image> List { get; private set; }= new List<Image>();
         public DatabaseHandler(Difficulty difficulty)
         {
-            if(difficulty == (Difficulty.Easy)) list = new DatabaseEasy().List;
-            else if(difficulty == (Difficulty.Medium)) list = new DatabaseMedium().List;
-            else if(difficulty == (Difficulty.Hard)) list = new DatabaseHard().List;
-        }        
-        public char[,] ChooseRandomImage()
-        {            
-            var random = new Random();
-            int index = random.Next(list.Count);
-            return list[index];
-        }
+            if(difficulty == (Difficulty.Easy)) List = new DatabaseEasy().List;
+            else if(difficulty == (Difficulty.Medium)) List = new DatabaseMedium().List;
+            else if(difficulty == (Difficulty.Hard)) List = new DatabaseHard().List;
+        }   
     }
 }

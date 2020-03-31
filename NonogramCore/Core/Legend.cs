@@ -4,8 +4,8 @@ namespace nonogram.Core
 {
     public class Legend
     {
-        public int[,] vertical { get; private set; }
-        public int[,] horizontal { get; private set; }
+        public int[,] Vertical { get; private set; }
+        public int[,] Horizontal { get; private set; }
         private int xSizeGrid;
         private int ySizeGrid;
         private int xMaxSizeLegend;
@@ -21,8 +21,8 @@ namespace nonogram.Core
             xMaxSizeLegend = (xSizeGrid / 2) + 1;
             yMaxSizeLegend = (ySizeGrid / 2) + 1;
 
-            vertical = new int[ySizeGrid, xMaxSizeLegend];
-            horizontal = new int[yMaxSizeLegend, xSizeGrid];
+            Vertical = new int[ySizeGrid, xMaxSizeLegend];
+            Horizontal = new int[yMaxSizeLegend, xSizeGrid];
 
             FillLegend();
             GenerateVertical();
@@ -41,13 +41,13 @@ namespace nonogram.Core
                     {
                         if(value != 0) 
                         {
-                            vertical[i,x] = value;
+                            Vertical[i,x] = value;
                             x++;
                         }
                         value = 0;
                     }
                 }
-                if(value != 0) vertical[i,x++] = value;
+                if(value != 0) Vertical[i,x++] = value;
                 value = 0;
                 x = 0;
             }
@@ -65,13 +65,13 @@ namespace nonogram.Core
                     {
                         if(value != 0) 
                         {
-                            horizontal[y,i] = value;
+                            Horizontal[y,i] = value;
                             y++;
                         }
                         value = 0;
                     }
                 }
-                if(value != 0) horizontal[y++,i] = value;
+                if(value != 0) Horizontal[y++,i] = value;
                 value = 0;
                 y = 0;
             }
@@ -83,14 +83,14 @@ namespace nonogram.Core
             {
                 for (int j = 0; j < xSizeGrid; j++)
                 {
-                    horizontal[i,j] = 0;
+                    Horizontal[i,j] = 0;
                 }
             }
             for (int i = 0; i < ySizeGrid; i++)
             {
                 for (int j = 0; j < xMaxSizeLegend; j++)
                 {
-                    vertical[i,j] = 0;
+                    Vertical[i,j] = 0;
                 }
             }
         }

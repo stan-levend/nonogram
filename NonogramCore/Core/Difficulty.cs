@@ -1,4 +1,4 @@
-namespace nonogram.States
+namespace nonogram.Core
 {
     public enum Difficulty
     {

@@ -1,6 +1,3 @@
-using System;
-using nonogram.States;
-
 namespace nonogram.Core
 {
     public class Tile

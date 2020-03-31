@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using nonogram.Core;
-using nonogram.States;
 
 namespace NonogramTest
 {

@@ -1,15 +1,16 @@
 using System;
-using nonogram.States;
 
 namespace nonogram.Core
 {
+    [Serializable]
     public class Grid {
         
         public int xSize { get; private set; }
         public int ySize { get; private set; }
         public Tile[,] Tiles { get; private set; }
-        private char[,] chosenImage;
         public GameState CurrentState { get; set; }
+        private char[,] chosenImage;
+        private DateTime startTime;
 
         public Grid(char[,] chosenImage)
         {
@@ -20,6 +21,7 @@ namespace nonogram.Core
 
             Tiles = new Tile[ySize, xSize];
             InitializeAndMapTiles();
+            startTime = DateTime.Now;
         }
 
         private void InitializeAndMapTiles() 
@@ -82,6 +84,12 @@ namespace nonogram.Core
             if(Tiles[y,x].Input == Tiles[y,x].Actual) RevealHint();
             Tiles[y,x].Input = Tiles[y,x].Actual;
         }
+
+        public int GetScore()
+        {
+            return xSize * ySize * 2 - (DateTime.Now - startTime).Seconds;
+        }
+
     }
 }
 

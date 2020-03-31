@@ -1,7 +1,8 @@
 using System;
 using nonogram.Core;
-using nonogram.States;
 using nonogram.Database;
+using nonogram.Service;
+using nonogram.Entity;
 
 namespace nonogram.ConsoleUI
 {
@@ -10,7 +11,10 @@ namespace nonogram.ConsoleUI
         private Legend legend;
         private DatabaseHandler databaseHandler;
         private Difficulty difficulty;
-        private int hints;
+        private Image chosenImage;
+        private readonly IScoreService scoreService = new ScoreServiceFile();
+        private static int hints = 10;
+
         public ConsoleUI() 
         {
         }
@@ -18,19 +22,28 @@ namespace nonogram.ConsoleUI
         public void Run() 
         {
             ProcessInputDifficulty();
+            ProcessInputImage();
             Initialize();
-            grid.CurrentState = GameState.Playing;
+
+            PrintScores();
 
             do 
             {
-                Print();
+                PrintGrid();
                 ProcessInput();
             } 
             while (grid.CurrentState == GameState.Playing);
 
-            Print();
-            if(grid.CurrentState == GameState.Won) Console.WriteLine("Congratulations, you have solved the puzzle");
+            PrintGrid();
+            if(grid.CurrentState == GameState.Won) 
+            {
+                Console.WriteLine("Congratulations, you have solved the puzzle");
+                scoreService.AddScore(new Score{ImageName = chosenImage.Name, 
+                                                Player = Environment.UserName, 
+                                                Points = grid.GetScore()});
+            }
             else if(grid.CurrentState == GameState.Lost) Console.WriteLine("Better luck next time.");
+            PrintScores();
         }
 
         private void ProcessInputDifficulty()
@@ -39,25 +52,21 @@ namespace nonogram.ConsoleUI
             {
                 Console.WriteLine("Choose difficulty from following: Easy, Medium, Hard");
                 string input = Console.ReadLine().ToLower();
-                if(input == "easy") 
+                switch (input)
                 {
-                    difficulty = Difficulty.Easy;
-                    hints = 5;
-                }
-                else if(input == "medium") 
-                {
-                    difficulty = Difficulty.Medium;
-                    hints = 10;
-                }
-                else if(input == "hard") 
-                {
-                    difficulty = Difficulty.Hard;
-                    hints = 15;
-                }
-                else
-                {
-                PrintError("You have chosen invalid difficulty. Try again.");
-                ProcessInputDifficulty();
+                    case "easy":
+                        difficulty = Difficulty.Easy;
+                        break;
+                    case "medium":
+                        difficulty = Difficulty.Medium;
+                        break;
+                    case "hard":
+                        difficulty = Difficulty.Hard;
+                        break;
+                    default:
+                        PrintError("You have chosen invalid difficulty. Try again.");
+                        ProcessInputDifficulty();
+                        break;
                 }
             }
             catch(Exception)
@@ -65,20 +74,49 @@ namespace nonogram.ConsoleUI
                 PrintError("You have chosen invalid difficulty. Try again.");
                 ProcessInputDifficulty();
             }
+            databaseHandler = new DatabaseHandler(difficulty);
+        }
+        private void ProcessInputImage()
+        {
+            Console.Write("Choose from following images: ");
+            foreach (var image in databaseHandler.List)
+            {
+                Console.Write("{0} ", image.Name);
+            }
+            Console.WriteLine();
+            try
+            {
+                string input = Console.ReadLine().ToLower();
+                chosenImage = null;
+                foreach (var image in databaseHandler.List)
+                {
+                    if(input == image.Name.ToLower()) chosenImage = image;
+                }
+                if(chosenImage == null) 
+                {
+                    PrintError("You have chosen invalid image. Try again.");
+                    ProcessInputImage();
+                }
+            }
+            catch(Exception)
+            {
+                PrintError("You have chosen invalid image. Try again.");
+                ProcessInputImage();
+            }
         }
 
         private void Initialize()
         {
-            databaseHandler = new DatabaseHandler(difficulty);
-            var chosenImage = databaseHandler.ChooseRandomImage();
-            grid = new Grid(chosenImage);
-            legend = new Legend(chosenImage);
+            grid = new Grid(chosenImage.Data);
+            legend = new Legend(chosenImage.Data);
+            
+            grid.CurrentState = GameState.Playing;
         }
 
         private void ProcessInput()
         {
             Console.WriteLine($"(S)olve (C)lear (H)int: {hints}");
-            Console.Write("(#)Mark or (.)Blank followed by x,y coordinates: ");
+            Console.Write("(#)Mark or (.)Blank followed by (x y) coordinates: ");
             try
             {
                 string[] input = Console.ReadLine().ToLower().Split();
@@ -109,7 +147,8 @@ namespace nonogram.ConsoleUI
                     var y = int.Parse(input[2]);
 
                     if(parsedInput == '#' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.MarkTile(x,y);
-                    if(parsedInput == '.' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
+                    else if(parsedInput == '.' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
+                    else PrintError("Wrong input!");
                 } 
             }
             catch (Exception) 
@@ -118,7 +157,7 @@ namespace nonogram.ConsoleUI
             }
         }
 
-        public void Print()
+        public void PrintGrid()
         {
             Console.Write("  ");
             for (int i = 0; i < grid.xSize; i++) Console.Write("{0, 3}", i);
@@ -136,8 +175,8 @@ namespace nonogram.ConsoleUI
                 Console.Write("| ");
                 for (int j = 0; j < grid.xSize / 2 + 1; j++)
                 {
-                    if(legend.vertical[i,j] == 0) continue;
-                    else Console.Write(String.Format("{0,-3}", legend.vertical[i,j]));
+                    if(legend.Vertical[i,j] == 0) continue;
+                    else Console.Write(String.Format("{0,-3}", legend.Vertical[i,j]));
                 }
                 Console.WriteLine();
             }
@@ -150,18 +189,29 @@ namespace nonogram.ConsoleUI
                 int zeros = 0;
                 for (int j = 0; j < grid.xSize; j++)
                 {
-                    if(legend.horizontal[i,j] == 0) 
+                    if(legend.Horizontal[i,j] == 0) 
                     {
                         Console.Write("   ");
                         zeros++;
                     }
-                    else Console.Write(String.Format("{0,3}", legend.horizontal[i,j]));
+                    else Console.Write(String.Format("{0,3}", legend.Horizontal[i,j]));
                 }
                 Console.WriteLine();
                 if(zeros == grid.xSize) break;
             }
         }
         
+        private void PrintScores()
+        {
+            Console.WriteLine("Top scores:");
+            int index = 1;
+            foreach (var score in scoreService.GetTopScores(chosenImage.Name))
+            {
+                Console.WriteLine("{0} {1} {2} {3}", index, score.ImageName, score.Player, score.Points);
+                index++;
+            }
+        }
+
         private void PrintError(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
