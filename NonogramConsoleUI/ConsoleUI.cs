@@ -46,7 +46,7 @@ namespace nonogram.ConsoleUI
             else if(grid.CurrentState == GameState.Lost) Console.WriteLine("Better luck next time.");
 
             AddComment();
-            AddRating();
+            //AddRating();
 
             /* PrintTopScores();
             PrintLatestComments();
@@ -152,7 +152,7 @@ namespace nonogram.ConsoleUI
                     var y = int.Parse(input[2]);
 
                     if(parsedInput == 'm' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.MarkTile(x,y);
-                    if(parsedInput == 'x' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
+                    else if(parsedInput == 'x' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
                 }
                 else 
                 {
