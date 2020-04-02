@@ -15,13 +15,13 @@ namespace nonogram.Core
         public Grid(char[,] chosenImage)
         {
             this.chosenImage = chosenImage;
-
             xSize = chosenImage.GetLength(1);
             ySize = chosenImage.GetLength(0);
 
             Tiles = new Tile[ySize, xSize];
             InitializeAndMapTiles();
             startTime = DateTime.Now;
+            CurrentState = GameState.Playing;
         }
 
         private void InitializeAndMapTiles() 
@@ -83,11 +83,12 @@ namespace nonogram.Core
             var y = random.Next(ySize);
             if(Tiles[y,x].Input == Tiles[y,x].Actual) RevealHint();
             Tiles[y,x].Input = Tiles[y,x].Actual;
+            IsWon();
         }
 
         public int GetScore()
         {
-            return xSize * ySize * 2 - (DateTime.Now - startTime).Seconds;
+            return xSize * ySize * 30 - (DateTime.Now - startTime).Seconds;
         }
 
     }

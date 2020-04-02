@@ -7,7 +7,9 @@ namespace nonogram.Service
     {
         void AddScore(Score score);
 
-        IList<Score> GetTopScores(string imageName);
+        IList<Score> GetTopImageScores(string imageName);
+
+        IList<Score> GetAllScores();
 
         void ClearScores();
     }

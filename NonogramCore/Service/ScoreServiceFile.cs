@@ -14,17 +14,28 @@ namespace nonogram.Service
 
         public void AddScore(Score score)
         {
+            if (score == null) throw new ScoreException("Score must be not null!");
+            if (score.Points < 0) throw new ScoreException("Score cannot be negative value!");
+
             scores.Add(score);
             SaveScore();
         }
 
-        public IList<Score> GetTopScores(string imageName)
+        public IList<Score> GetTopImageScores(string imageName)
         {
             LoadScore();
             return (from s in scores 
-                    where s.ImageName.ToLower() == imageName.ToLower()
+                    where s.ImageName == imageName
                     orderby s.Points 
                     descending select s).Take(5).ToList();
+        }
+
+        public IList<Score> GetAllScores()
+        {
+            LoadScore();
+            return (from s in scores 
+                    orderby s.Points 
+                    descending select s).ToList();
         }
 
         public void ClearScores()
