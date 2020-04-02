@@ -40,14 +40,15 @@ namespace nonogram.ConsoleUI
             PrintGrid();
             if(grid.CurrentState == GameState.Won) 
             {
-                //AddScore();
+                AddScore();
                 Console.WriteLine("Congratulations, you have solved the puzzle");
             }
             else if(grid.CurrentState == GameState.Lost) Console.WriteLine("Better luck next time.");
 
-            /* AddComment();
+            AddComment();
             AddRating();
-            PrintTopScores();
+
+            /* PrintTopScores();
             PrintLatestComments();
             PrintAllTimeRating(); */
         }
@@ -151,12 +152,7 @@ namespace nonogram.ConsoleUI
                     var y = int.Parse(input[2]);
 
                     if(parsedInput == 'm' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.MarkTile(x,y);
-                    else if(parsedInput == 'x' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
-                    else 
-                    {
-                        PrintError("Wrong input!");
-                        ProcessInput();
-                    }
+                    if(parsedInput == 'x' && grid.xSize > x && grid.ySize > y && x >= 0 && y >= 0) grid.BlankTile(x,y);
                 }
                 else 
                 {
