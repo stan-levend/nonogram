@@ -5,7 +5,7 @@ namespace nonogram.Entity
     [Serializable]
     public class Rating
     {
-        public int RatingID { get; set; }
+        public int ID { get; set; }
         
         public int Value { get; set; }
 

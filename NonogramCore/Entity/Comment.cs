@@ -5,7 +5,7 @@ namespace nonogram.Entity
     [Serializable]
     public class Comment
     {
-        public int CommentID { get; set; }
+        public int ID { get; set; }
         
         public string ImageName { get; set; }
 

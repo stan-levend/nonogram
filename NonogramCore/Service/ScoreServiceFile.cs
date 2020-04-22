@@ -17,6 +17,7 @@ namespace nonogram.Service
             if (score == null) throw new ScoreException("Score must be not null!");
             if (score.Points < 0) throw new ScoreException("Score cannot be negative value!");
 
+            //score.Id = scores.Count() + 1;
             scores.Add(score);
             SaveScore();
         }

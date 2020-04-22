@@ -15,7 +15,7 @@ namespace nonogram.Service
         {
             if (rating == null) throw new RatingException("Rating must be not null!");
             if (rating.Value < 1 || rating.Value > 5) throw new RatingException("You can rate this game only by 1-5 stars.");
-            rating.RatingID = this.rating.Count() + 1;
+            //rating.ID = this.rating.Count() + 1;
             this.rating.Add(rating);
             SaveRating();
         }
@@ -24,7 +24,7 @@ namespace nonogram.Service
         {
             LoadRating();
             return (from r in rating
-                    orderby r.RatingID
+                    orderby r.ID
                     descending select r).Take(10).ToList();
         }
 

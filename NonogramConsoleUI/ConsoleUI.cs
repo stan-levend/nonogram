@@ -13,9 +13,13 @@ namespace nonogram.ConsoleUI
         private DatabaseHandler databaseHandler;
         private Difficulty difficulty;
         private Image chosenImage;
-        private readonly IScoreService scoreService = new ScoreServiceFile();
-        private readonly ICommentService commentService = new CommentServiceFile();
-        private readonly IRatingService ratingService = new RatingServiceFile();
+        //private readonly IScoreService scoreService = new ScoreServiceFile();
+        private readonly IScoreService scoreService = new ScoreServiceEF();
+        //private readonly ICommentService commentService = new CommentServiceFile();
+        private readonly ICommentService commentService = new CommentServiceEF();
+        //private readonly IRatingService ratingService = new RatingServiceFile();
+        private readonly IRatingService ratingService = new RatingServiceEF();
+
         private static int hints = 10;
 
         public ConsoleUI() 
@@ -27,7 +31,9 @@ namespace nonogram.ConsoleUI
             ChooseDifficulty();
             ChooseImage();
             Initialize();
-
+            //scoreService.ClearScores();
+            //commentService.ClearComments();
+            //ratingService.ClearRating();
             PrintTopScores();
 
             do 
@@ -45,12 +51,13 @@ namespace nonogram.ConsoleUI
             }
             else if(grid.CurrentState == GameState.Lost) Console.WriteLine("Better luck next time.");
 
+            //AddScore();
             AddComment();
-            //AddRating();
-
-            /* PrintTopScores();
+            AddRating();
+            
+            PrintTopScores();
             PrintLatestComments();
-            PrintAllTimeRating(); */
+            PrintAllTimeRating();
         }
 
         private void ChooseDifficulty()

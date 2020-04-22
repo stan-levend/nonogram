@@ -15,7 +15,7 @@ namespace nonogram.Service
         {
             if (comment == null) throw new CommentException("Comment must be not null!");
             if (comment.Text == null) throw new CommentException("Comment text field can't remain blank.");
-            comment.CommentID = comments.Count() + 1;
+            //comment.ID = comments.Count() + 1;
             
             comments.Add(comment);
             SaveComments();
@@ -25,7 +25,7 @@ namespace nonogram.Service
         {
             LoadComments();
             return (from c in comments
-                    orderby c.CommentID
+                    orderby c.ID
                     descending select c).Take(3).ToList();
         }
 
