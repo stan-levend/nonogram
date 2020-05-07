@@ -1,0 +1,34 @@
+﻿@using NonogramWeb.Models
+@model NonogramModel
+
+@{
+    ViewData["Title"] = "Nonogram";
+}
+
+<h1>Choose difficulty from following:</h1>
+
+@Html.ActionLink("Easy", "Image", "Nonogram", new { difficulty = nonogram.Core.Difficulty.Easy })
+@Html.ActionLink("Medium", "Image", "Nonogram", new { difficulty = nonogram.Core.Difficulty.Medium })
+@Html.ActionLink("Hard", "Image", "Nonogram", new { difficulty = nonogram.Core.Difficulty.Hard })
+
+
+
+
+@*
+    <h2><a href="/Nonogram/Image?difficulty=@(nonogram.Core.Difficulty.Easy)">Easy</a></h2>
+    <h2><a href="/Nonogram/Image?difficulty=@(nonogram.Core.Difficulty.Medium)">Medium</a></h2>
+    <h2><a href="/Nonogram/Image?difficulty=@(nonogram.Core.Difficulty.Hard)">Hard</a></h2>
+
+
+    @Html.ActionLink("Easy", "Image", "Nonogram", new { difficulty = nonogram.Core.Difficulty.Easy })
+    @Html.ActionLink("Medium", "Image", "Nonogram", new { difficulty = nonogram.Core.Difficulty.Medium })
+    @Html.ActionLink("Hard", "Image", "Nonogram", new { difficulty = nonogram.Core.Difficulty.Hard })
+
+
+        <br />
+        @foreach (var image in Model.DatabaseHandler.List)
+        {
+            @Html.ActionLink(image.Name, "PlayingGrid", "Nonogram", new { difficulty = Model.Difficulty, chosenImageData = image.Name })
+            <text> (@image.Data.GetLength(1) x @image.Data.GetLength(0))</text>
+        }
+*@

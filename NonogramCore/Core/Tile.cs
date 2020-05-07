@@ -1,5 +1,8 @@
+using System;
+
 namespace nonogram.Core
 {
+    [Serializable]
     public class Tile
     {
         public Tile()
