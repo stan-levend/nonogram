@@ -1,0 +1,34 @@
+﻿@using NonogramWeb.Models;
+@model NonogramModel
+
+@functions {
+    string RenderGrid(string imageName)
+    {
+        return imageName;
+    }
+}
+
+
+@{
+    ViewData["Title"] = "Image";
+}
+
+
+
+<h1>Choose from @Model.Difficulty Difficulty Images</h1>
+
+<br />
+@foreach (var imageName in Model.ImageNameList)
+{
+    <h2>
+        @Html.ActionLink(imageName, "PlayingGrid", "Nonogram", new { chosenImageName = imageName, difficulty = Model.Difficulty })
+    </h2>
+}
+<br />
+<h2>
+    @Html.ActionLink("Back", "Index", "Nonogram")
+</h2>
+
+@*<text>
+        (@image.Data.GetLength(1) x @image.Data.GetLength(0))
+</text>*@

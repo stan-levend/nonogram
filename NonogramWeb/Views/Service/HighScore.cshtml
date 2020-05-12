@@ -1,0 +1,32 @@
+﻿@using NonogramWeb.Models;
+@model ServiceModel
+
+@{
+    ViewData["Title"] = "High Score";
+}
+
+<table class="service">
+    <caption>High Score</caption>
+
+    @for (var i = 0; i < Model.ImageNameList.Count; i++)
+    {
+        <tr>
+            <th>@Model.ImageNameList[i]</th>
+            <th>Player</th>
+            <th>Score</th>
+        </tr>
+        @foreach (var item in Model.Scores)
+        {
+
+            if (Model.ImageNameList[i] == item.ImageName)
+            {
+                <tr>
+                    <td></td>
+                    <td>@item.Player</td>
+                    <td>@item.Points</td>
+                </tr>
+            }
+        }
+    }
+
+</table>

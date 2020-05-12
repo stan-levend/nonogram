@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using nonogram.Core;
 using nonogram.Database;
@@ -18,144 +19,128 @@ namespace NonogramWeb.Controllers
 {
     public class NonogramController : Controller
     {
-        //IScoreService _scoreService = new ScoreServiceEF();
-        //private NonogramModel model = new NonogramModel();
+        private NonogramModel model = new NonogramModel();
+        private IScoreService scoreService = new ScoreServiceEF();
 
-        /*public IActionResult Index()
+        public IActionResult Index()
         {
             return View();
         }
         public IActionResult Image(Difficulty difficulty)
         {
-            var model = PrepareModel("Difficulty chosen:", difficulty);
+            model.Difficulty = difficulty;
+            model.ImageNameList= new DatabaseHandler(difficulty).NameList;
             return View(model);
         }
-        public IActionResult PlayingGrid()
+        public IActionResult PlayingGrid(string chosenImageName, Difficulty difficulty)
         {
+            var ImageList = new DatabaseHandler(difficulty).List;
 
-            var grid = new Grid(new Dog().Data);
-            HttpContext.Session.SetObject("grid", grid);
-
-            var model = PrepareModel("Chosen image");
-            return View(model);
-        }
-        public IActionResult HowToPlay()
-        {
-            return View();
-
-        }
-        public IActionResult HighScore()
-        {
-            return View();
-
-        }
-        public IActionResult CommentRating()
-        {
-            return View();
-
-        }
-        public NonogramModel PrepareModel(string message, Difficulty difficulty)
-        {
-            return new NonogramModel
+            foreach (var image in ImageList)
             {
-                Message = message,
-                Difficulty = difficulty,
-                DatabaseHandler = new DatabaseHandler(difficulty)
-            };
-        }
-        public NonogramModel PrepareModel(string message)
-        {
-            return new NonogramModel
-            {
-                Grid = (Grid)HttpContext.Session.GetObject("grid"),
-                Message = message,
-            };
-        } */
-        /*
-        public IActionResult PlayingGrid(Difficulty difficulty, string s)
-        {
-
-            PrepareModel("Chosen image", difficulty);
-            foreach (var item in model.DatabaseHandler.List)
-            {
-                if (item.Name == s) model.Image = item;   
+                if (image.Name == chosenImageName)
+                {
+                    model.Image = image;
+                    HttpContext.Session.SetObject("image", image);
+                }
             }
+
             var grid = new Grid(model.Image.Data);
             HttpContext.Session.SetObject("grid", grid);
+            var legend = new Legend(model.Image.Data);
+            HttpContext.Session.SetObject("legend", legend);
 
-            model.Grid = (Grid)HttpContext.Session.GetObject("grid");
-            //PrepareModel("Chosen image", difficulty);
+            PrepareModel("Grid prepared");
             return View(model);
         }
-        public IActionResult Image(Difficulty difficulty)
+        public IActionResult ChangeState(int x, int y)
         {
-            PrepareModel("Difficulty chosen:", difficulty);
-            return View(model);
-        }
-        public IActionResult HowToPlay()
-        {
-            return View();
-
-        }
-        
-        public IActionResult HighScore()
-        {
-            return View();
-        }
-        public IActionResult CommentRating()
-        {
-            return View();
-
-        }
-        public IActionResult Index()
-        {
-            model.Image = null;
-            PrepareModel("New field created");
-            return View();
-
-        }
-        public void PrepareModel(string message)
-        {
-            model.Message = message;
-        }
-
-        public void PrepareModel(string message, Difficulty difficulty)
-        {
-            //model.Grid = (Grid)HttpContext.Session.GetObject("grid");
-            model.Message = message;
-            model.Difficulty = difficulty;
-            model.DatabaseHandler = new DatabaseHandler(difficulty);
-        } */
-
-
-        public IActionResult Index()
-        {
-            var grid = new Grid(new Snail().Data);
+            var grid = (Grid)HttpContext.Session.GetObject("grid");
+            if (grid.Tiles[y, x].Input == TileState.Colored)
+                grid.BlankTile(x, y);
+            else grid.MarkTile(x, y);
             HttpContext.Session.SetObject("grid", grid);
 
-            var model = PrepareModel("Grid prepared");
-            return View(model);
+            if (GameIsWon(grid))
+                PrepareModel("Congratulations, you have won!");
+            else PrepareModel($"Changed State of tile ({x+1}, {y+1})");
+
+            return View("PlayingGrid", model);
         }
-        public IActionResult HowToPlay()
+        public IActionResult RevealHint()
         {
-            return View();
-        }
-        public IActionResult HighScore()
-        {
-            return View();
-        }
-        public IActionResult CommentRating()
-        {
-            return View();
-        }
-        private NonogramModel PrepareModel(string message)
-        {
-            return new NonogramModel
+            var grid = (Grid)HttpContext.Session.GetObject("grid");
+            if (grid.Hints > 0 && grid.CurrentState == GameState.Playing)
             {
-                Grid = (Grid)HttpContext.Session.GetObject("grid"),
-                Message = message,
-            };
+                grid.RevealHint();
+                HttpContext.Session.SetObject("grid", grid);
+
+                if (GameIsWon(grid))
+                    PrepareModel("Congratulations, you have won!");
+                else PrepareModel("Hint revealed!");
+
+            } else PrepareModel("Can't use more hints.");
+
+
+            return View("PlayingGrid", model);
+        }
+        public IActionResult SolveGrid()
+        {
+            var grid = (Grid)HttpContext.Session.GetObject("grid");
+            if (grid.CurrentState == GameState.Playing)
+            {
+                grid.Solve();
+                HttpContext.Session.SetObject("grid", grid);
+                PrepareModel("Solving grid.");
+            }
+            else PrepareModel("The grid is already solved");
+
+            return View("PlayingGrid", model);
+        }
+        public IActionResult ClearGrid()
+        {
+            var grid = (Grid)HttpContext.Session.GetObject("grid");
+            if (grid.CurrentState == GameState.Playing)
+            {
+                grid.Clear();
+                HttpContext.Session.SetObject("grid", grid);
+                PrepareModel("You have cleared the grid.");
+            }
+            else PrepareModel($"The game is already {grid.CurrentState}");
+
+            return View("PlayingGrid", model);
         }
 
+        public IActionResult NewGame()
+        {
+            var grid = (Grid)HttpContext.Session.GetObject("grid");
+            HttpContext.Session.SetObject("grid", new Grid(grid.ChosenImage));
+            PrepareModel("New grid prepared");
+
+            return View("PlayingGrid", model);
+        }
+
+        private void PrepareModel(string message)
+        {
+            model.Grid = (Grid)HttpContext.Session.GetObject("grid");
+            model.Legend = (Legend)HttpContext.Session.GetObject("legend");
+            model.Message = message;
+        }
+
+        private bool GameIsWon(Grid grid)
+        {
+            if (grid.CurrentState == GameState.Won)
+            {
+                model.Image = (Image)HttpContext.Session.GetObject("image");
+                scoreService.AddScore(new Score
+                {
+                    Player = Environment.UserName,
+                    Points = grid.GetScore(),
+                    ImageName = model.Image.Name
+                });
+                return true;
+            }
+            return false;
+        }
     }
 } 

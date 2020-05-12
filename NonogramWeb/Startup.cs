@@ -64,11 +64,11 @@ namespace NonogramWeb
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Nonogram}/{action=Index}/{id?}");
+                    pattern: "{controller=Service}/{action=HowToPlay}/{id?}");
                 endpoints.MapRazorPages();
 
             });
-
+            
             /*app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

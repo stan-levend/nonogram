@@ -20,8 +20,6 @@ namespace nonogram.ConsoleUI
         //private readonly IRatingService ratingService = new RatingServiceFile();
         private readonly IRatingService ratingService = new RatingServiceEF();
 
-        private static int hints = 10;
-
         public ConsoleUI() 
         {
         }
@@ -127,7 +125,7 @@ namespace nonogram.ConsoleUI
 
         private void ProcessInput()
         {
-            Console.WriteLine($"'S' - Solve grid, 'C' - Clear grid, 'H' - Random hint, {hints} available.");
+            Console.WriteLine($"'S' - Solve grid, 'C' - Clear grid, 'H' - Random hint, {grid.Hints} available.");
             Console.WriteLine("'M' - Mark / 'X' - Blank tile followed by 'x y' coordinates of the tile. Example: M 0 2");
             try
             {
@@ -145,13 +143,12 @@ namespace nonogram.ConsoleUI
                 }
                 else if (parsedInput == 'h')
                 {
-                    if(hints == 0) 
+                    if(grid.Hints == 0) 
                     {
                         PrintError("No more hints available");
                         return;
                     }
                     grid.RevealHint();
-                    hints--;
                 }
                 else if(parsedInput == 'm' || parsedInput == 'x') 
                 {
@@ -193,7 +190,7 @@ namespace nonogram.ConsoleUI
                     {
                         Console.BackgroundColor = ConsoleColor.White;
                         Console.Write(" ");
-                        Console.BackgroundColor = backgroundDefault;
+                        Console.BackgroundColor = ConsoleColor.Black;
                     }
                     else if (grid.Tiles[i,j].Input == TileState.Blank) Console.Write("X");
                     else if (grid.Tiles[i,j].Input == TileState.Hidden) Console.Write(".");
@@ -207,6 +204,7 @@ namespace nonogram.ConsoleUI
                 Console.WriteLine();
                 Console.WriteLine();
             }
+
             //print HorizontalLegend
             for (int i = 0; i < grid.ySize / 2 + 1; i++)
             {

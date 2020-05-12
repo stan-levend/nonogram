@@ -41,7 +41,7 @@ namespace nonogram.Service
             using (var context = new NonogramDbContext())
             {
                 return (from s in context.Scores
-                        orderby s.Points
+                        orderby s.ImageName, s.Points
                         descending
                         select s).ToList();
             }

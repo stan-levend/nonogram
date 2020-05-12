@@ -1,0 +1,144 @@
+﻿.GUI-grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr minmax();
+    grid-gap: 1em 1em;
+    grid-template-areas: "GUI-1  GUI-2" "GUI-3 GUI-4"
+}
+
+.GUI-1 {
+    grid-area: GUI-1;
+}
+
+.GUI-2 {
+    grid-area: GUI-2;
+}
+
+.GUI-3 {
+    grid-area: GUI-3;
+}
+
+.GUI-4 {
+    grid-area: GUI-4;
+}
+
+grid {
+    width: 100%;
+    table-layout: fixed;
+    height: auto;
+    text-align: center;
+}
+
+#rows {
+    width: 50%;
+    table-layout: fixed;
+    height: 100%;
+    text-align: center;
+}
+
+#cols {
+    width: 100%;
+    table-layout: fixed;
+    height: 50%;
+    text-align: center;
+}
+
+.gridTable {
+    width: 100%;
+    table-layout: fixed;
+    height: 100%;
+}
+
+.square {
+    width: 100%;
+    height: 100%;
+}
+
+#white {
+    background-color: white;
+}
+
+#black {
+    background-color: black;
+}
+
+#x {
+    background-color: none;
+    background-image: url("../img/x.png");
+    background-size: 100% 100%;
+}
+
+
+img {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    margin: auto auto;
+}
+
+#serviceComponents {
+    width: inherit;
+}
+
+#example {
+    max-width: 50%
+}
+
+.service {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+    .service td, #service th {
+        border: 1px solid #ddd;
+        padding: 1%;
+    }
+
+    .service tr:nth-child(even) {
+        background-color: #E7ECEF;
+    }
+
+    .service th {
+        padding: 1%;
+        text-align: left;
+        background-color: #FFC857;
+        color: black;
+    }
+
+    .service caption {
+        caption-side: top;
+        background-color: #344966;
+        color: white;
+        font-size: x-large;
+        font-weight: bold;
+        padding: 1%;
+    }
+
+.grid-fit {
+    background-color: #344966;
+    color: white;
+    padding-top: 0.5em;
+    padding-left: 1rem;
+    height: 100%;
+}
+
+label {
+    display: inline-block;
+    width: 5rem;
+    text-align: right;
+}
+
+input[type="text"], input[type="button"] {
+    width: 20rem
+}
+
+#legend {
+    width: 50%; 
+    background-color: #344966;
+    padding: 2rem;
+    color: white;
+}
+
+#logo {
+    margin-right: 2em;
+}

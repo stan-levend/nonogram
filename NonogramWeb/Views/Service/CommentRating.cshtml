@@ -1,0 +1,87 @@
+﻿@using NonogramWeb.Models;
+@model ServiceModel
+
+@{
+    ViewData["Title"] = "Comments/Rating";
+}
+<div class="GUI-grid-container">
+    <div class="GUI-1">
+        <table class="service">
+            <caption>Rating</caption>
+
+            <tr>
+                <th>Rating</th>
+                <th>Users</th>
+            </tr>
+
+
+            @for (int i = 5; i > 0; i--)
+            {
+                string result = new string('*', i);
+                <tr>
+                    <td>@result</td>
+                    <td>@Model.Ratings[i - 1]</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="GUI-2">
+        <section class="grid-fit">
+            <h4>Rate the game!</h4>
+            @using (Html.BeginForm("AddRating", "Service", FormMethod.Post))
+            {
+
+                @Html.Label("5  ") @Html.RadioButtonFor(model => model.Rating, 5) @Html.Label("*****")<br />
+                @Html.Label("4  ") @Html.RadioButtonFor(model => model.Rating, 4) @Html.Label("****")<br />
+                @Html.Label("3  ") @Html.RadioButtonFor(model => model.Rating, 3) @Html.Label("***")<br />
+                @Html.Label("2  ") @Html.RadioButtonFor(model => model.Rating, 2) @Html.Label("**")<br />
+                @Html.Label("1  ") @Html.RadioButtonFor(model => model.Rating, 1) @Html.Label("*") <br />
+                <button type="submit">Add Rating</button>
+            }
+        </section>
+    </div>
+</div>
+
+
+
+<br />
+<table class="service">
+    <caption>Latest comments</caption>
+
+    <tr>
+        <th>Image</th>
+        <th>Player</th>
+        <th>Comment text</th>
+    </tr>
+
+    @foreach (var item in Model.Comments)
+    {
+        if (String.IsNullOrEmpty(item.Text)) continue;
+        <tr>
+            <td>@item.ImageName</td>
+            <td>@item.Player</td>
+            <td>@item.Text</td>
+        </tr>
+    }
+</table>
+<br />
+
+<section class="grid-fit">
+    <h4>Leave us a comment about the game:</h4>
+    @using (Html.BeginForm("AddComment", "Service", FormMethod.Post))
+    {
+        <p>
+            @Html.Label("Comment: ")
+            @Html.TextBoxFor(model => model.Comment.Text)
+            @Html.ValidationMessageFor(model => model.Comment.Text)
+        </p>
+        <p>
+            @Html.Label("Image: ")
+            @Html.TextBoxFor(model => model.Comment.ImageName)
+            @Html.ValidationMessageFor(model => model.Comment.ImageName)
+        </p>
+
+        <button type="submit">Add comment</button>
+        <br /><br />
+    }
+</section>

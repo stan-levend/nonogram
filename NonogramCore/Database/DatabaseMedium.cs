@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace nonogram.Database
@@ -5,6 +6,8 @@ namespace nonogram.Database
     public class DatabaseMedium
     {
         public List<Image> List { get; private set; } = new List<Image>();
+        public List<string> NameList { get; private set; } = new List<string>();
+
 
         public DatabaseMedium()
         {
@@ -12,9 +15,13 @@ namespace nonogram.Database
             List.Add(new Human());
             List.Add(new Turtle());
             List.Add(new Bird());
+            NameList.Add(new Teacan().Name);
+            NameList.Add(new Human().Name);
+            NameList.Add(new Turtle().Name);
+            NameList.Add(new Bird().Name);
         }
     }
-
+    [Serializable]
     public class Teacan : Image
     {
         public Teacan() {
@@ -34,6 +41,7 @@ namespace nonogram.Database
             };
         }
     }
+    [Serializable]
     public class Turtle : Image
     {
         public Turtle() {
@@ -53,7 +61,7 @@ namespace nonogram.Database
             };
         }
     }
-
+    [Serializable]
     public class Human : Image
     {
         public Human() {
@@ -73,7 +81,7 @@ namespace nonogram.Database
             };
         }
     }
-
+    [Serializable]
     public class Bird : Image
     {
         public Bird() {

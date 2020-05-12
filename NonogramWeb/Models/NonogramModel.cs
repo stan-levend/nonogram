@@ -12,12 +12,16 @@ namespace NonogramWeb.Models
     {
         public Grid Grid { get; set; }
 
-        public string Message { get; set; }
-
-        public IList<Score> Scores { get; set; }
-
-        public DatabaseHandler DatabaseHandler { get; set; }
+        public Legend Legend { get; set; }
 
         public Image Image { get; set; }
+
+        public string Message { get; set; }
+
+        public List<string> ImageNameList { get; set; }
+
+        public Difficulty Difficulty { get; set; }
+
+        public IList<Score> Scores { get; set; }
     }
 }

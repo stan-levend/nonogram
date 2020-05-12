@@ -1,0 +1,134 @@
+﻿@using NonogramWeb.Models;
+@model NonogramModel
+
+
+@{
+    ViewData["Title"] = "PlayingGrid";
+    var zeros = 0;
+    double tileWidth = 100 / Model.Grid.xSize;
+    double tileHeight = 100 / Model.Grid.ySize;
+}
+
+
+<div class="GUI-grid-container">
+    <div class="GUI-1">
+        <table class="gridTable" border="1">
+            @for (var row = 0; row < Model.Grid.ySize; row++)
+            {
+                <tr style="height:(@tileHeight)% width:(@tileWidth)%">
+                    @for (var column = 0; column < Model.Grid.xSize; column++)
+                    {
+
+                        var tile = Model.Grid.Tiles[row, column];
+
+                        if (tile.Input == nonogram.Core.TileState.Blank)
+                        {
+                            <td style="height:(@tileHeight)% width:(@tileWidth)%">
+                                <a href='@Url.Action("ChangeState", "Nonogram", new { x = column, y = row })'>
+                                    <div class="square" id="x"></div>
+                                </a>
+                            </td>
+                        }
+                        else if (tile.Input == nonogram.Core.TileState.Colored)
+                        {
+                            <td style="height:(@tileHeight)% width:(@tileWidth)%">
+                                <a href='@Url.Action("ChangeState", "Nonogram", new { x = column, y = row })'>
+                                    <div class="square" id="black"></div>
+                                </a>
+                            </td>
+
+                        }
+                        else
+                        {
+                            <td style="height:(@tileHeight)% width:(@tileWidth)%">
+                                <a href='@Url.Action("ChangeState", "Nonogram", new { x = column, y = row })'>
+                                    <div class="square" id="white"></div>
+                                </a>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="GUI-2">
+        <table id="rows">
+            @for (var row = 0; row < Model.Grid.ySize; row++)
+            {
+                <tr>
+                    @for (var column = 0; column < Model.Grid.xSize / 2 + 1; column++)
+                    {
+                        var tile = Model.Legend.Vertical[row, column];
+
+                        if (tile == 0)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>
+                                <p>@tile</p>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+    <div class="GUI-3">
+        <table id="cols">
+            @for (var row = 0; row < Model.Grid.ySize / 2 + 1; row++)
+            {
+                zeros = 0;
+                <tr>
+                    @for (var column = 0; column < Model.Grid.xSize; column++)
+                    {
+                        var tile = Model.Legend.Horizontal[row, column];
+
+                        if (tile == 0)
+                        {
+                            <td></td>
+                            zeros++;
+                        }
+                        else
+                        {
+                            <td>
+                                <p>@tile</p>
+                            </td>
+                        }
+                    }
+                    @if (zeros == Model.Grid.xSize) break;
+                </tr>
+            }
+        </table>
+    </div>
+
+</div>
+
+<div>
+    <section id="legend">
+        <h4>@Model.Message</h4>
+        <h4><b>@Model.Grid.CurrentState</b></h4>
+        <h4>Score: <b>@Model.Grid.GetScore()</b></h4>
+        <input type="button"
+               value="Hint: @Model.Grid.Hints"
+               onclick="location.href = '@Url.Action("RevealHint", "Nonogram")'" />
+        <br />
+        <input type="button"
+               value="Solve Grid"
+               onclick="location.href = '@Url.Action("SolveGrid", "Nonogram")'" />
+        <br />
+        <input type="button"
+               value="Clear Grid"
+               onclick="location.href = '@Url.Action("ClearGrid", "Nonogram")'" />
+        <br />
+        <br />
+        <input type="button"
+               value="New Game"
+               onclick="location.href = '@Url.Action("NewGame", "Nonogram")'" />
+    </section>
+</div>
+
+
+
+

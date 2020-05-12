@@ -23,7 +23,7 @@ namespace nonogram.Service
                 return (from c in context.Comments
                         orderby c.ID
                         descending
-                        select c).Take(3).ToList();
+                        select c).Take(20).ToList();
             }
         }
 

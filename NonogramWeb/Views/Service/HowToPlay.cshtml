@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "How to play";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Nonogram</h1>
+</div>
+<br />
+
+<h1>How to play</h1>
+
+<p>
+    Nonograms, also known as Picross, Griddlers, Pic-a-Pix, and various other names, are picture logic puzzles in which <b>cells in a grid must be colored or left blank according to numbers at the side of the grid to reveal a hidden picture.</b>
+</p>
+<p>
+    In this puzzle type, the numbers are a form of discrete tomography that measures how many unbroken lines of filled-in squares there are in any given row or column.
+</p>
+<p>
+    For example, a clue of "4 8 3" would mean there are sets of four, eight, and three filled squares, in that order, with at least one blank square between successive sets.
+</p>
+<p>
+    These puzzles are black and white describing a binary image.
+</p>
+
+<br />
+<h4>Example:</h4>
+<img id="example" src="~/img/example.png" />
+
+<br />
+<p>Solving techniques: <a href="http://www.pro.or.jp/~fuji/java/puzzle/nonogram/knowhow0-1-eng.html">by Hirofumi Fujiwara</a></p>
+
+<p>
+    Let's get started.  @Html.ActionLink("Play!", "Index", "Nonogram")
+</p>

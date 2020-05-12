@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace nonogram.Database
@@ -5,16 +6,20 @@ namespace nonogram.Database
     public class DatabaseHard
     {
         public List<Image> List { get; private set; } = new List<Image>();
+        public List<string> NameList { get; private set; } = new List<string>();
 
         public DatabaseHard()
         {
             List.Add(new Snail());
             List.Add(new Bear());
             List.Add(new Dice());
+            NameList.Add(new Snail().Name);
+            NameList.Add(new Bear().Name);
+            NameList.Add(new Dice().Name);
         }
 
     }
-
+    [Serializable]
     public class Snail : Image
     {
         public Snail() 
@@ -39,7 +44,7 @@ namespace nonogram.Database
             };
         }
     }
-
+    [Serializable]
     public class Bear : Image
     {
         public Bear() 
@@ -65,7 +70,7 @@ namespace nonogram.Database
             };
         }
     }
-
+    [Serializable]
     public class Dice : Image
     {
         public Dice() 

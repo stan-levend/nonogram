@@ -2,6 +2,7 @@ using System;
 
 namespace nonogram.Core
 {
+    [Serializable]
     public class Legend
     {
         public int[,] Vertical { get; private set; }

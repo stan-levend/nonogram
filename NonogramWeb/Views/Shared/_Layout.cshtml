@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - NonogramWeb</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" runat="server" />
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="icon" href="~/img/logo.png" type="image/icon type">
+
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
+                <img src="~/img/logo.png" width="40" height="40" class="navbar-toggler-icon" id="logo"/>
                 <a class="navbar-brand" asp-area="" asp-controller="Nonogram" asp-action="Index">Play</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -19,13 +23,13 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Nonogram" asp-action="HighScore">High Scores</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="HighScore">High Scores</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Nonogram" asp-action="CommentRating">Comments/Rating</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="CommentRating">Comments/Rating</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Nonogram" asp-action="HowToPlay">How to play</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="HowToPlay">How to play</a>
                         </li>
                     </ul>
                 </div>
