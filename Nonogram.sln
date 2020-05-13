@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NonogramConsoleUI", "NonogramConsole\NonogramConsoleUI.csproj", "{682DB732-8DA6-4036-A9E7-DACA40468753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NonogramConsoleUI", "NonogramConsoleUI\NonogramConsoleUI.csproj", "{682DB732-8DA6-4036-A9E7-DACA40468753}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NonogramTest", "NonogramTest\NonogramTest.csproj", "{C773B409-1E38-48A1-A899-6B723DE7AEB2}"
 EndProject
