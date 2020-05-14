@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +22,5 @@ namespace NonogramWeb.Models
 
         public Difficulty Difficulty { get; set; }
 
-        public IList<Score> Scores { get; set; }
     }
 }

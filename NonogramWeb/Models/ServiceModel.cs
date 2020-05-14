@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,8 +12,6 @@ namespace NonogramWeb.Models
     public class ServiceModel
     {
         public List <string> ImageNameList { get; set; }
-
-        public Difficulty Difficulty { get; set; }
 
         public IList<Score> Scores { get; set; }
 
